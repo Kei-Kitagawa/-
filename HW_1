@@ -1,0 +1,28 @@
+%matplotlib inline
+import numpy as np
+import numpy.polynomial.polynomial as pol
+import matplotlib.pyplot as plt
+def NPV(r, CF):
+    x = 1.0 / (np.exp(r * 0.01))
+    return pol.polyval(x, CF)
+def IRR(CF):
+    Roots = pol.polyroots(CF)
+    Real = np.real(Roots[np.isreal(Roots)])
+    Positive = (Real[Real > 0.0]).item(0)
+    return (1.0 / Positive - 1.0) * 100
+Periods = np.linspace(0, 4, 5)
+V_CF = np.array([[-5.0, 1.5, 1.5, 1.5, 1.5],
+                 [-7.0, 2.0, 2.0, 2.0, 2.0],
+                 [-9.0, 4.0, 3.0, 2.0, 1.0],
+                 [-9.0, 1.0, 2.0, 3.0, 4.0]])
+V_Title = ['project A', 'project B', 'project C', 'project D']
+r = 5
+V_NPV = np.zeros(4)
+for cf_num in range(4):
+    V_NPV[cf_num] = NPV(r, V_CF[cf_num, :])
+V_IRR = np.zeros(4)
+for cf_num in range(4):
+    V_IRR[cf_num] = IRR(V_CF[cf_num, :])
+print(V_NPV)
+print(V_IRR)
+
